@@ -618,7 +618,18 @@ class PhoneInput extends React.Component {
     if (!newSelectedCountry) return;
 
     const unformattedNumber = this.state.formattedNumber.replace(' ', '').replace('(', '').replace(')', '').replace('-', '');
-    const newNumber = unformattedNumber.length > 1 ? unformattedNumber.replace(currentSelectedCountry.dialCode, newSelectedCountry.dialCode) : newSelectedCountry.dialCode;
+    /* if disableCountryCode is enabled then don't replace dialCode */
+    const newNumber =
+      unformattedNumber.length > 1
+        ? this.props.disableCountryCode
+          ? unformattedNumber
+          : unformattedNumber.replace(
+              currentSelectedCountry.dialCode,
+              newSelectedCountry.dialCode
+            )
+        : this.props.disableCountryCode
+        ? ""
+        : newSelectedCountry.dialCode;
     const formattedNumber = this.formatNumber(newNumber.replace(/\D/g, ''), newSelectedCountry);
 
     this.setState({
